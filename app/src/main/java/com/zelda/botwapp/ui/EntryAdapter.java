@@ -38,7 +38,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CompendiumEntry entry = entries.get(position);
-        holder.txtName.setText(entry.getName());
+        holder.txtName.setText(capitalize(entry.getName()));
 
         ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
                 .data(entry.getImage())
@@ -47,6 +47,20 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
         Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(entry.getId()));
+    }
+
+    private String capitalize(String text) {
+        if (text == null || text.isEmpty()) return text;
+        String[] words = text.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                sb.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(" ");
+            }
+        }
+        return sb.toString().trim();
     }
 
     @Override

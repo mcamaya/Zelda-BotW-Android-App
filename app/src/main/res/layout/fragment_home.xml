@@ -33,7 +33,7 @@
             android:id="@+id/btnCreatures"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Criaturas"
+            android:text="Creatures"
             android:textSize="18sp"
             android:backgroundTint="#16213e"
             android:layout_marginBottom="16dp"/>
@@ -42,7 +42,7 @@
             android:id="@+id/btnMonsters"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Monstruos"
+            android:text="Monsters"
             android:textSize="18sp"
             android:backgroundTint="#16213e"
             android:layout_marginBottom="16dp"/>
@@ -51,7 +51,7 @@
             android:id="@+id/btnMaterials"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Materiales"
+            android:text="Materials"
             android:textSize="18sp"
             android:backgroundTint="#16213e"
             android:layout_marginBottom="16dp"/>
@@ -60,7 +60,7 @@
             android:id="@+id/btnEquipment"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Equipamiento"
+            android:text="Equipment"
             android:textSize="18sp"
             android:backgroundTint="#16213e"
             android:layout_marginBottom="16dp"/>
@@ -69,7 +69,7 @@
             android:id="@+id/btnTreasure"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Tesoros"
+            android:text="Treasure"
             android:textSize="18sp"
             android:backgroundTint="#16213e"
             android:layout_marginBottom="16dp"/>

@@ -18,7 +18,6 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.zelda.botwapp.ui.CategoryFragment"
-        android:label="Categoría"
         tools:layout="@layout/fragment_category">
         <argument
             android:name="categoryName"
@@ -31,7 +30,6 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.zelda.botwapp.ui.DetailFragment"
-        android:label="Detalle"
         tools:layout="@layout/fragment_detail" >
         <argument
             android:name="entryId"
