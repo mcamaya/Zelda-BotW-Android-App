@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://botw-compendium.herokuapp.com/api/v3/";
+    private static final String BASE_URL = "https://botw-compendium.herokuapp.com/api/v3/compendium/";
     private static RetrofitClient instance;
     private final ApiService api;
 

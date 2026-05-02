@@ -1,66 +1,77 @@
 package com.zelda.botwapp.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ProgressBar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.zelda.botwapp.R;
+import com.zelda.botwapp.model.CategoryResponse;
+import com.zelda.botwapp.network.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CategoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CategoryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public CategoryFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CategoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CategoryFragment newInstance(String param1, String param2) {
-        CategoryFragment fragment = new CategoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_category, container, false);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        String category = getArguments() != null ? getArguments().getString("categoryName") : "creatures";
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        progressBar.setVisibility(View.VISIBLE);
+
+        Call<CategoryResponse> call = getCallForCategory(category);
+        call.enqueue(new Callback<CategoryResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<CategoryResponse> call, @NonNull Response<CategoryResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                android.util.Log.d("API_RESPONSE", "Code: " + response.code());
+                android.util.Log.d("API_RESPONSE", "Body: " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    android.util.Log.d("API_RESPONSE", "Items: " + response.body().getData().size());
+                    EntryAdapter adapter = new EntryAdapter(response.body().getData(), id -> {
+                        Bundle args = new Bundle();
+                        args.putInt("entryId", id);
+                        Navigation.findNavController(view).navigate(R.id.action_category_to_detail, args);
+                    });
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CategoryResponse> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                android.util.Log.e("API_ERROR", "Error: " + t.getMessage());
+            }
+        });
+    }
+
+    private Call<CategoryResponse> getCallForCategory(String category) {
+        switch (category) {
+            case "monsters": return RetrofitClient.getInstance().getApi().getMonsters();
+            case "materials": return RetrofitClient.getInstance().getApi().getMaterials();
+            case "equipment": return RetrofitClient.getInstance().getApi().getEquipment();
+            case "treasure": return RetrofitClient.getInstance().getApi().getTreasure();
+            default: return RetrofitClient.getInstance().getApi().getCreatures();
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category, container, false);
-    }
 }
